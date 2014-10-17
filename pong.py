@@ -73,8 +73,21 @@ def draw(canvas):
     canvas.draw_circle( ball_pos, BALL_RADIUS, 1, 'White', 'White')
     
     # update paddle's vertical position, keep paddle on the screen
-    paddle1_pos[1] += paddle1_vel
-    paddle2_pos[1] += paddle2_vel
+    if paddle1_pos[1] < HALF_PAD_HEIGHT:
+        paddle1_pos[1] = HALF_PAD_HEIGHT
+    elif paddle1_pos[1] > HEIGHT - HALF_PAD_HEIGHT:
+        paddle1_pos[1] = HEIGHT - HALF_PAD_HEIGHT
+    else:
+        paddle1_pos[1] += paddle1_vel
+    
+    if paddle2_pos[1] < HALF_PAD_HEIGHT:
+        paddle2_pos[1] = HALF_PAD_HEIGHT
+    elif paddle2_pos[1] > HEIGHT - HALF_PAD_HEIGHT:
+        paddle2_pos[1] = HEIGHT - HALF_PAD_HEIGHT
+    else:
+        paddle2_pos[1] += paddle2_vel
+    
+    
     # draw paddles
     canvas.draw_line([0 + HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT],[0 + HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT], PAD_WIDTH, 'White')
     canvas.draw_line([WIDTH - HALF_PAD_WIDTH, paddle2_pos[1] - HALF_PAD_HEIGHT],[WIDTH - HALF_PAD_WIDTH, paddle2_pos[1] + HALF_PAD_HEIGHT], PAD_WIDTH, 'White')
@@ -85,13 +98,13 @@ def draw(canvas):
 def keydown(key):
     global paddle1_vel, paddle2_vel
     if key == simplegui.KEY_MAP['w']:
-        paddle1_vel = -2
+        paddle1_vel = -8
     if key == simplegui.KEY_MAP['s']:
-        paddle1_vel = 2
+        paddle1_vel = 8
     if key == simplegui.KEY_MAP['up']:
-        paddle2_vel = -2
+        paddle2_vel = -8
     if key == simplegui.KEY_MAP['down']:
-        paddle2_vel = 2
+        paddle2_vel = 8
         
 def keyup(key):
     global paddle1_vel, paddle2_vel
