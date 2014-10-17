@@ -89,7 +89,10 @@ def keydown(key):
         
 def keyup(key):
     global paddle1_vel, paddle2_vel
-    
+    if key == simplegui.KEY_MAP['w'] or key == simplegui.KEY_MAP['s']:
+        paddle1_vel = 0
+    if key == simplegui.KEY_MAP['up'] or key == simplegui.KEY_MAP['down']:
+        paddle2_vel = 0
 
 def velocityIncrease():
     global ball_vel
