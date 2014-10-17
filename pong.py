@@ -18,6 +18,16 @@ RIGHT = True
 score1 = 0
 score2 = 0
 
+def restart_button_handler():
+    global score1, score2
+    global paddle1_pos, paddle2_pos, ball_pos
+    paddle1_pos = [0 + PAD_WIDTH, HEIGHT / 2.0]
+    paddle2_pos = [WIDTH - PAD_WIDTH, HEIGHT / 2.0]
+    ball_pos = [WIDTH / 2, HEIGHT / 2]
+    score1 = 0 
+    score2 = 0
+    new_game(RIGHT)
+    
 # initialize ball_pos and ball_vel for new bal in middle of table
 # if direction is RIGHT, the ball's velocity is upper right, else upper left
 def spawn_ball(direction):
@@ -120,7 +130,7 @@ def velocityIncrease():
 
 # create frame
 frame = simplegui.create_frame("Pong", WIDTH, HEIGHT)
-
+restart_button = frame.add_button('Restart', restart_button_handler)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown)
 frame.set_keyup_handler(keyup)
