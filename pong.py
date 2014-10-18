@@ -83,12 +83,11 @@ def draw(canvas):
     canvas.draw_circle( ball_pos, BALL_RADIUS, 1, 'White', 'White')
     
     # update paddle's vertical position, keep paddle on the screen
-    if paddle1_pos[1] < HALF_PAD_HEIGHT:
-        paddle1_pos[1] = HALF_PAD_HEIGHT
-    elif paddle1_pos[1] > HEIGHT - HALF_PAD_HEIGHT:
-        paddle1_pos[1] = HEIGHT - HALF_PAD_HEIGHT
-    else:
+    '''
+    if paddle1_pos[1] > HALF_PAD_HEIGHT and paddle1_pos[1] < HEIGHT - HALF_PAD_HEIGHT:
         paddle1_pos[1] += paddle1_vel
+    else:
+        paddle1_pos[1] = HALF_PAD_HEIGHT + 0.1
     
     if paddle2_pos[1] < HALF_PAD_HEIGHT:
         paddle2_pos[1] = HALF_PAD_HEIGHT
@@ -96,7 +95,7 @@ def draw(canvas):
         paddle2_pos[1] = HEIGHT - HALF_PAD_HEIGHT
     else:
         paddle2_pos[1] += paddle2_vel
-    
+    '''
     
     # draw paddles
     canvas.draw_line([0 + HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT],[0 + HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT], PAD_WIDTH, 'White')
@@ -123,6 +122,23 @@ def keyup(key):
     if key == simplegui.KEY_MAP['up'] or key == simplegui.KEY_MAP['down']:
         paddle2_vel = 0
 
+def movePaddles():
+    """paddles moves with current paddle velocity."""
+    global paddle1, paddle2, paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel
+    if paddle1_pos[1] + paddele1_vel < HALF_PAD_HEIGHT:
+        paddle1_pos[1] = HALF_PAD_HEIGHT
+    elif paddle1_pos[1] + paddele1_vel < HEIGHT - HALF_PAD_HEIGHT:
+        paddle1_pos[1] = HEIGHT - HALF_PAD_HEIGHT
+    else:
+        paddle1_pos[1] += paddle1_vel
+        
+    if paddle2_pos[1] + paddele2_vel < HALF_PAD_HEIGHT:
+        paddle2_pos[1] = HALF_PAD_HEIGHT
+    elif paddle2_pos[1] + paddele2_vel < HEIGHT - HALF_PAD_HEIGHT:
+        paddle2_pos[1] = HEIGHT - HALF_PAD_HEIGHT
+    else:
+        paddle2_pos[1] += paddle2_vel
+        
 def velocityIncrease():
     global ball_vel
     print ball_vel
