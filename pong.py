@@ -51,51 +51,19 @@ def new_game(right):
     
 def draw(canvas):
     global score1, score2, paddle1_pos, paddle2_pos, ball_pos, ball_vel
- 
         
     # draw mid line and gutters
     canvas.draw_line([WIDTH / 2, 0],[WIDTH / 2, HEIGHT], 1, "White")
     canvas.draw_line([PAD_WIDTH, 0],[PAD_WIDTH, HEIGHT], 1, "White")
     canvas.draw_line([WIDTH - PAD_WIDTH, 0],[WIDTH - PAD_WIDTH, HEIGHT], 1, "White")  
     # update ball
-    if ball_pos[0] <= BALL_RADIUS:
-        if ball_pos[1] > paddle1_pos[1] - PAD_HEIGHT / 2 and ball_pos[1] < paddle1_pos[1] + PAD_HEIGHT / 2:
-            ball_vel[0] = -ball_vel[0]
-            velocityIncrease()
-        else:
-            score2 += 1
-            new_game(RIGHT)
-    elif ball_pos[0] >= WIDTH - BALL_RADIUS:
-        if ball_pos[1] > (paddle2_pos[1] - HALF_PAD_HEIGHT) and ball_pos[1] < (paddle2_pos[1] + HALF_PAD_HEIGHT):
-            ball_vel[0] = -ball_vel[0]
-            velocityIncrease()
-        else:
-            score1 += 1
-            new_game(LEFT)  
-    ball_pos[0] += ball_vel[0]
-        
-    if ball_pos[1] <= BALL_RADIUS or ball_pos[1] >= HEIGHT - BALL_RADIUS:
-        ball_vel[1] = - ball_vel[1]
-        
-    ball_pos[1] += ball_vel[1]
+    moveBall()
     
     # draw ball
     canvas.draw_circle( ball_pos, BALL_RADIUS, 1, 'White', 'White')
     
     # update paddle's vertical position, keep paddle on the screen
-    '''
-    if paddle1_pos[1] > HALF_PAD_HEIGHT and paddle1_pos[1] < HEIGHT - HALF_PAD_HEIGHT:
-        paddle1_pos[1] += paddle1_vel
-    else:
-        paddle1_pos[1] = HALF_PAD_HEIGHT + 0.1
-    
-    if paddle2_pos[1] < HALF_PAD_HEIGHT:
-        paddle2_pos[1] = HALF_PAD_HEIGHT
-    elif paddle2_pos[1] > HEIGHT - HALF_PAD_HEIGHT:
-        paddle2_pos[1] = HEIGHT - HALF_PAD_HEIGHT
-    else:
-        paddle2_pos[1] += paddle2_vel
-    '''
+    movePaddles()
     
     # draw paddles
     canvas.draw_line([0 + HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT],[0 + HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT], PAD_WIDTH, 'White')
@@ -122,24 +90,50 @@ def keyup(key):
     if key == simplegui.KEY_MAP['up'] or key == simplegui.KEY_MAP['down']:
         paddle2_vel = 0
 
+def moveBall():
+    """ ball moves with current ball velocity."""
+    global ball_pos, paddle1_pos, paddle2_pos
+    global score1, score2
+    if ball_pos[0] <= BALL_RADIUS:
+        if ball_pos[1] > paddle1_pos[1] - PAD_HEIGHT / 2 and ball_pos[1] < paddle1_pos[1] + PAD_HEIGHT / 2:
+            ball_vel[0] = -ball_vel[0]
+            velocityIncrease()
+        else:
+            score2 += 1
+            new_game(RIGHT)
+    elif ball_pos[0] >= WIDTH - BALL_RADIUS:
+        if ball_pos[1] > (paddle2_pos[1] - HALF_PAD_HEIGHT) and ball_pos[1] < (paddle2_pos[1] + HALF_PAD_HEIGHT):
+            ball_vel[0] = -ball_vel[0]
+            velocityIncrease()
+        else:
+            score1 += 1
+            new_game(LEFT)  
+    ball_pos[0] += ball_vel[0]
+        
+    if ball_pos[1] <= BALL_RADIUS or ball_pos[1] >= HEIGHT - BALL_RADIUS:
+        ball_vel[1] = - ball_vel[1]
+        
+    ball_pos[1] += ball_vel[1]
+        
 def movePaddles():
-    """paddles moves with current paddle velocity."""
+    """paddles move with current paddle velocity."""
     global paddle1, paddle2, paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel
-    if paddle1_pos[1] + paddele1_vel < HALF_PAD_HEIGHT:
+    if paddle1_pos[1] + paddle1_vel < HALF_PAD_HEIGHT:
         paddle1_pos[1] = HALF_PAD_HEIGHT
-    elif paddle1_pos[1] + paddele1_vel < HEIGHT - HALF_PAD_HEIGHT:
+    elif paddle1_pos[1] + paddle1_vel > HEIGHT - HALF_PAD_HEIGHT:
         paddle1_pos[1] = HEIGHT - HALF_PAD_HEIGHT
     else:
         paddle1_pos[1] += paddle1_vel
         
-    if paddle2_pos[1] + paddele2_vel < HALF_PAD_HEIGHT:
+    if paddle2_pos[1] + paddle2_vel < HALF_PAD_HEIGHT:
         paddle2_pos[1] = HALF_PAD_HEIGHT
-    elif paddle2_pos[1] + paddele2_vel < HEIGHT - HALF_PAD_HEIGHT:
+    elif paddle2_pos[1] + paddle2_vel > HEIGHT - HALF_PAD_HEIGHT:
         paddle2_pos[1] = HEIGHT - HALF_PAD_HEIGHT
     else:
         paddle2_pos[1] += paddle2_vel
         
 def velocityIncrease():
+    """ball velocity increase with each bong with paddle"""
     global ball_vel
     print ball_vel
     ball_vel = map(lambda x: x * 1.2, ball_vel)
